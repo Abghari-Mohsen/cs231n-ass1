@@ -205,11 +205,10 @@ class LinearSVM:
 
         for i in range(num_train):
             scores = X[i].dot(W)
-            scores += 1 # note delta = 1
             correct_class_score = scores[y[i]]
             scores -= correct_class_score
-            # scores += 1 # note delta = 1
-            # scores[y[i]]=0
+            scores += 1 # note delta = 1
+            scores[y[i]]=0
             scores = np.where(scores>0,1,0)
             for j in range(num_classes):
                 if j==y[i]: dW[:,j]+=-scores.sum()*X[i]
