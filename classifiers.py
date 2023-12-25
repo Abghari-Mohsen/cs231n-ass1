@@ -203,18 +203,19 @@ class LinearSVM:
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
+        # This is the analytical gradient of the loss function where loss is hinge. The gradient of loss takes over all weights for each training example.
         for i in range(num_train):
             scores = X[i].dot(W)
             correct_class_score = scores[y[i]]
             scores -= correct_class_score
             scores += 1 # note delta = 1
             scores[y[i]]=0
-            scores = np.where(scores>0,1,0)
+            scores = np.where(scores>0,1,0) # specific condition: if the maximum function output is not zero its derivative returns 1 times x_i
             for j in range(num_classes):
-                if j==y[i]: dW[:,j]+=-scores.sum()*X[i]
-                else: dW[:,j]+=scores[j]*X[i]
+                if j==y[i]: dW[:,j]+=-scores.sum()*X[i] # The gradient of loss over the w_yi for each j=y[i] which returns sum(-x_i)_j over all j examples if the specific condition met. 
+                else: dW[:,j]+=scores[j]*X[i] # The gradient of loss over the w_j for each j!=y[i] which returns x_i if the specific condition met. You can find out more in the SVM_image_classification.ipynb file 
         dW/=num_train
-        dW+=2*reg*W
+        dW+=2*reg*W #derivative of regularization term of loss with respect to weights 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         return loss, dW
