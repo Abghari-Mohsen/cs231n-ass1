@@ -238,8 +238,8 @@ class LinearSVM:
 
         scores = X.dot(W)
         s_correct_cls = scores[np.arange(scores.shape[0]), y]
-        loss = scores - s_correct_cls[:, np.newaxis] + 1 #delta is equal to 1
-        loss[np.arange(loss.shape[0]), y] = 0
+        loss = scores - s_correct_cls[:, np.newaxis] + 1 # Converts 1D array s_correct_cls with shape (scores.shape[0],) to 2D array where its shape would be (scores.shape[0],1). Note that delta is equal to 1
+        loss[np.arange(loss.shape[0]), y] = 0 # Sets the value of correct class indices to 0
         loss = np.where(loss>0,loss,0)
         loss = loss.sum()/loss.shape[0]
         loss += reg*np.sum(W*W)
@@ -258,7 +258,10 @@ class LinearSVM:
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        loss_ = scores - s_correct_cls[:, np.newaxis] + 1
+        loss_[np.arange(loss_.shape[0]), y] = 0
+        loss_ = np.where(loss_>0,loss_,0)
+        loss_ = loss_.sum(axis=0)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
